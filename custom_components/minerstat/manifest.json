@@ -1,0 +1,10 @@
+{
+  "domain": "minerstat",
+  "name": "Minerstat",
+  "documentation": "https://github.com/maeneak/minerstat",
+  "issue_tracker": "https://github.com/maeneak/minerstat/issues",
+  "dependencies": [],
+  "config_flow": true,
+  "codeowners": ["@maeneak"],
+  "requirements": []
+}
