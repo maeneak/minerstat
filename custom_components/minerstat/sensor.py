@@ -120,6 +120,8 @@ class MinerstatWorkerSensor(CoordinatorEntity):
             "id": f"{self.name}_worker",
             "integration": DOMAIN,
             **self.coordinator.data[self.ref]["info"],
+            **self.coordinator.data[self.ref]["revenue"],
+            **self.coordinator.data[self.ref]["mining"],
         }
 
     @property
@@ -174,7 +176,6 @@ class MinerstatSensor(CoordinatorEntity):
             "attribution": ATTRIBUTION,
             "id": f"{self.name}_worker",
             "integration": DOMAIN,
-            **self.coordinator.data[self.ref]["info"],
         }
 
     @property
@@ -186,7 +187,12 @@ class MinerstatSensor(CoordinatorEntity):
     @property
     def state(self):
         """Return the state of the sensor."""
-        return self.coordinator.data[self.ref]["info"]["status"]
+        hashrate = 0.0
+        for worker in self.coordinator.data:
+            for gpu in worker["mining"]:
+                hashrate += gpu["hashrate"]["hashrate"]
+
+        return hashrate
 
     @property
     def icon(self):
