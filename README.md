@@ -1,11 +1,14 @@
 # Minerstat
-STILL UNDER DEVELOPMENT
-Home Assistant Custom Compenent for displaying Minerstat Worker Stats
+Home Assistant Custom Compenent for displaying Minerstat Worker Stats.
+All entities contain the 'Attributes' of the Minerstat objects
 
 [![hacs][hacsbadge]][hacs]
 [![BuyMeCoffee][buymecoffeebadge]][buymecoffee]
 
 ## Installation
+
+Easiest way is to add this repository as a 'Custom Repository' in HACS. Then steps 6 and 7 below. 
+Alternatively to install without HACS:
 
 1. Using the tool of choice open the directory (folder) for your HA configuration (where you find `configuration.yaml`).
 2. If you do not have a `custom_components` directory (folder) there, you need to create it.
