@@ -16,16 +16,19 @@ HEADERS = {"Content-type": "application/json; charset=UTF-8"}
 
 class MinerstatApiClient:
     def __init__(
-        self, apikey: str, session: aiohttp.ClientSession
+        self, accesskey: str, apikey: str, session: aiohttp.ClientSession
     ) -> None:
         """Sample API Client."""
         self.apikey = apikey
-        self.url = "https://api.minerstat.com/v2/stats/" + apikey
+        self.accesskey = accesskey
+        self.url = "https://api.minerstat.com/v2/stats/" + accesskey
         self._session = session
 
     async def async_get_data(self) -> dict:
         """Get data from the API."""
-        return await self.api_wrapper("post", self.url)
+        return await self.api_wrapper(
+            "post", self.url, None, {"Authorisation": f"bearer {self.apikey}"}
+        )
 
     async def api_wrapper(
         self, method: str, url: str, data: dict = {}, headers: dict = {}
@@ -44,7 +47,9 @@ class MinerstatApiClient:
                     await self._session.patch(url, headers=headers, json=data)
 
                 elif method == "post":
-                    await self._session.post(url, headers=headers, json=data)
+                    response = await self._session.post(url, headers=headers, json=data)
+                    json = await response.json()
+                    return json
 
         except asyncio.TimeoutError as exception:
             _LOGGER.error(

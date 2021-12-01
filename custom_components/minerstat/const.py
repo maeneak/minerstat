@@ -5,7 +5,7 @@ DOMAIN = "minerstat"
 DOMAIN_DATA = f"{DOMAIN}_data"
 VERSION = "0.0.1"
 
-ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
+ATTRIBUTION = "Data provided by https://minerstat.com/"
 ISSUE_URL = "https://github.com/maeneak/minerstat/issues"
 
 # Icons
@@ -18,11 +18,14 @@ BINARY_SENSOR_DEVICE_CLASS = "connectivity"
 BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
 SWITCH = "switch"
-PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH]
+PLATFORMS = [SENSOR]
 
+MS_INFO = "info"
+MS_HARDWARE = "hardware"
 
 # Configuration and options
 CONF_ENABLED = "enabled"
+CONF_ACCESSCODE = "accesscode"
 CONF_APIKEY = "apikey"
 
 # Defaults

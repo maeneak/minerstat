@@ -17,7 +17,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from .api import MinerstatApiClient
-from .const import CONF_APIKEY
+from .const import CONF_ACCESSCODE, CONF_APIKEY
 from .const import DOMAIN
 from .const import PLATFORMS
 from .const import STARTUP_MESSAGE
@@ -38,10 +38,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
 
+    accesskey = entry.data.get(CONF_ACCESSCODE)
     apikey = entry.data.get(CONF_APIKEY)
 
     session = async_get_clientsession(hass)
-    client = MinerstatApiClient(apikey, session)
+    client = MinerstatApiClient(accesskey, apikey, session)
+    workers = await client.async_get_data()
 
     coordinator = MinerstatDataUpdateCoordinator(hass, client=client)
     await coordinator.async_refresh()
@@ -50,6 +52,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         raise ConfigEntryNotReady
 
     hass.data[DOMAIN][entry.entry_id] = coordinator
+
+    # for worker in workers:
 
     for platform in PLATFORMS:
         if entry.options.get(platform, True):

@@ -5,7 +5,8 @@
         "title": "Minerstat",
         "description": "If you need help with the configuration have a look here: https://github.com/maeneak/minerstat",
         "data": {
-          "apikey": "API Key"
+          "apikey": "API Key",
+          "accesscode": "Access Code Key"
         }
       }
     },

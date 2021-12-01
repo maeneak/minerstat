@@ -5,7 +5,7 @@ from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .api import MinerstatApiClient
-from .const import CONF_APIKEY
+from .const import CONF_ACCESSCODE, CONF_APIKEY
 from .const import DOMAIN
 from .const import PLATFORMS
 
@@ -30,11 +30,11 @@ class MinerstatFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             valid = await self._test_credentials(
-                user_input[CONF_APIKEY]
+                user_input[CONF_APIKEY], user_input[CONF_ACCESSCODE]
             )
             if valid:
                 return self.async_create_entry(
-                    title=user_input[CONF_APIKEY], data=user_input
+                    title=user_input[CONF_ACCESSCODE], data=user_input
                 )
             else:
                 self._errors["base"] = "auth"
@@ -53,16 +53,16 @@ class MinerstatFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
-                {vol.Required(CONF_APIKEY): str}
+                {vol.Required(CONF_ACCESSCODE): str, vol.Required(CONF_APIKEY): str}
             ),
             errors=self._errors,
         )
 
-    async def _test_credentials(self, apikey):
+    async def _test_credentials(self, apikey, accesskey):
         """Return true if credentials is valid."""
         try:
             session = async_create_clientsession(self.hass)
-            client = MinerstatApiClient(apikey, session)
+            client = MinerstatApiClient(accesskey, apikey, session)
             await client.async_get_data()
             return True
         except Exception:  # pylint: disable=broad-except
@@ -101,5 +101,5 @@ class MinerstatOptionsFlowHandler(config_entries.OptionsFlow):
     async def _update_options(self):
         """Update config entry options."""
         return self.async_create_entry(
-            title=self.config_entry.data.get(CONF_APIKEY), data=self.options
+            title=self.config_entry.data.get(CONF_ACCESSCODE), data=self.options
         )
